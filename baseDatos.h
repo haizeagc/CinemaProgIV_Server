@@ -10,24 +10,21 @@
 #ifndef BASEDATOS_BASEDATOS_H_
 #define BASEDATOS_BASEDATOS_H_
 
-void reiniciar(HashMap *config);
+//Subir
+void subirClienteBase(HashMap *config, Cliente c);
+void subirEntradaBase(HashMap *config, Entrada e);
 
-void subirAdminBase(HashMap *config);
-void anadirAdminBase(char* nom, int contra, HashMap *config);
-void borrarAdminBase(char* nom, HashMap *config);
-void obtenerAdminBase(Arrays *a, HashMap *config);
-
-void subirPeliculaBase(HashMap *config);
-void anadirPeliculaBase(int cod, char* nom, char* genero, char* director, char* hora, int sala, int precio ,HashMap *config);
-void borrarPeliculaBase(int cod, HashMap *config);
+//Obtener
+void obtenerClienteBase(Arrays *a, HashMap *config);
+void obtenerEntradaBase(Arrays *a, HashMap *config);
 void obtenerPeliculaBase(Arrays *a, HashMap *config);
 
-void subirClienteBase(HashMap *config);
-void borrarClienteBase(char* dni, HashMap *config);
-void obtenerClienteBase(Arrays *a, HashMap *config);
+//Actualizar
+void actuCliente(char *dni, char* nombre, char *num, char *pais, int contra, int telf, HashMap *config);
 
-void subirEntradaBase(HashMap *config);
-void borrarEntradaBase(int cod, HashMap *config);
-void obtenerEntradaBase(Arrays *a, HashMap *config);
+//Borrar
+void borrarClienteDni(char *dni, HashMap *config);
+void borrarEntradaDni(char *dni, HashMap *config);
+void borrar();
 
 #endif
