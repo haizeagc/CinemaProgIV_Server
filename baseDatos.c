@@ -22,25 +22,18 @@ void subirClienteBase(HashMap *config, Cliente c){
 		for(int k=0; k< 6; k++){
 			char sql1[] = "insert into CLIENTE (dni, nombre, num_tarj, pais, contrasena, telf) values (?,?,?,?,?,?)";
 
-			char* dni = clientes[k].dni;
-			char* nombre = clientes[k].nombre;
-			char* num_tarj = clientes[k].num_tarj;
-			char* pais = clientes[k].pais;
-			int contrasena = clientes[k].contrasena;
-			int telf = clientes[k].telf;
-
 			result = sqlite3_prepare_v2(db, sql1, strlen(sql1) + 1, &stmt, NULL);
 			if(result != SQLITE_OK){
 				logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para insertar clientes no ha podido prepararse.");
 			}else{
 				logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para insertar clientes esta preparado.");
 			}
-			sqlite3_bind_text(stmt, 1, dni, strlen(dni), SQLITE_STATIC);
-			sqlite3_bind_text(stmt, 2, nombre, strlen(nombre), SQLITE_STATIC);
-			sqlite3_bind_text(stmt, 3, num_tarj,strlen(num_tarj),SQLITE_STATIC);
-			sqlite3_bind_text(stmt, 4, pais, strlen(pais), SQLITE_STATIC);
-			sqlite3_bind_int(stmt, 5, contrasena);
-			sqlite3_bind_int(stmt, 6, telf);
+			sqlite3_bind_text(stmt, 1, c.dni, strlen(c.dni), SQLITE_STATIC);
+			sqlite3_bind_text(stmt, 2, c.nombre, strlen(c.nombre), SQLITE_STATIC);
+			sqlite3_bind_text(stmt, 3, c.num_tarj,strlen(c.num_tarj),SQLITE_STATIC);
+			sqlite3_bind_text(stmt, 4, c.pais, strlen(c.pais), SQLITE_STATIC);
+			sqlite3_bind_int(stmt, 5, c.contrasena);
+			sqlite3_bind_int(stmt, 6, c.telf);
 			result = sqlite3_step(stmt);
 				if (result != SQLITE_DONE){
 					logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","No se ha podido insertar este cliente a la base de datos.");
@@ -63,12 +56,6 @@ void subirClienteBase(HashMap *config, Cliente c){
 						logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha cerrado la base de datos para insertar clientes.");
 					}
 
-		free(clientes);
-		free(clientes->dni);
-		free(clientes->nombre);
-		free(clientes->num_tarj);
-		free(clientes->pais);
-		logger_log(obtenerConfigConcreto(config,"logger"),"INFO","Memoria que contenia los valores de clientes del csv ha sido liberada.");
 }
 
 void subirEntradaBase(HashMap *config, Entrada e){
@@ -87,33 +74,22 @@ void subirEntradaBase(HashMap *config, Entrada e){
 		for(int k=0; k< 6; k++){
 			char sql3[] = "insert into ENTRADA (cod_E, dni, cod_pelicula, sala, hora, dia, mes, ano, importe, persona) values (?,?,?,?,?,?,?,?,?,?)";
 
-			int cod_E = entradas[k].cod_E;
-			char* dni = entradas[k].dni;
-			int cod_pelicula = entradas[k].cod_pelicula;
-			int sala = entradas[k].sala;
-			char* hora = entradas[k].hora;
-			int dia = entradas[k].dia;
-			int mes = entradas[k].mes;
-			int ano = entradas[k].ano;
-			int importe = entradas[k].importe;
-			int personas = entradas[k].personas;
-
 			result = sqlite3_prepare_v2(db, sql3, strlen(sql3) + 1, &stmt, NULL);
 			if(result != SQLITE_OK){
 				logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para insertar entradas no ha podido prepararse.");
 			}else{
 				logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para insertar entradas esta preparado.");
 			}
-			sqlite3_bind_int(stmt, 1, cod_E);
-			sqlite3_bind_text(stmt, 2, dni, strlen(dni), SQLITE_STATIC);
-			sqlite3_bind_int(stmt, 3, cod_pelicula);
-			sqlite3_bind_int(stmt, 4, sala);
-			sqlite3_bind_text(stmt, 5, hora, strlen(hora), SQLITE_STATIC);
-			sqlite3_bind_int(stmt, 6, dia);
-			sqlite3_bind_int(stmt, 7, mes);
-			sqlite3_bind_int(stmt, 8, ano);
-			sqlite3_bind_int(stmt, 9, importe);
-			sqlite3_bind_int(stmt, 10, personas);
+			sqlite3_bind_int(stmt, 1, e.cod_E);
+			sqlite3_bind_text(stmt, 2, e.dni, strlen(e.dni), SQLITE_STATIC);
+			sqlite3_bind_int(stmt, 3, e.cod_pelicula);
+			sqlite3_bind_int(stmt, 4, e.sala);
+			sqlite3_bind_text(stmt, 5, e.hora, strlen(e.hora), SQLITE_STATIC);
+			sqlite3_bind_int(stmt, 6, e.dia);
+			sqlite3_bind_int(stmt, 7, e.mes);
+			sqlite3_bind_int(stmt, 8, e.ano);
+			sqlite3_bind_int(stmt, 9, e.importe);
+			sqlite3_bind_int(stmt, 10, e.personas);
 			result = sqlite3_step(stmt);
 				if (result != SQLITE_DONE){
 					logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","No se ha podido insertar esta entrada a la base de datos.");
@@ -135,11 +111,6 @@ void subirEntradaBase(HashMap *config, Entrada e){
 					}else{
 						logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha cerrado la base de datos para insertar entradas.");
 					}
-
-		free(entradas);
-		free(entradas->dni);
-		free(entradas->hora);
-		logger_log(obtenerConfigConcreto(config,"logger"),"INFO","Memoria que contenia los valores de entradas del csv ha sido liberada.");
 }
 
 //OBTENER
@@ -355,8 +326,50 @@ void obtenerEntradaBase(Arrays *a, HashMap *config){
 		}
 //ACTUALIZAR
 void actuCliente(char *dni, char* nombre, char *num, char *pais, int contra, int telf, HashMap *config){
+	sqlite3 *db;
+		sqlite3_stmt *stmt;
+		int result;
+		result = sqlite3_open(obtenerConfigConcreto(config,"base"), &db);
+		if (result != SQLITE_OK){
+			logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","No se ha abierto la base de datos para bloquear/desbloquear un cliente.");
+		}else{
+			logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha abierto la base de datos para bloquear/desbloquear un cliente.");
+			}
 
-}
+		char sql[] = "UPDATE CLIENTE SET NOMBRE = ?, NUM_TARJ = ?, PAIS = ?, CONTRASENA = ?, TELF = ? WHERE DNI = ?";
+		result = sqlite3_prepare_v2(db, sql, strlen(sql) + 1, &stmt, NULL);
+		if (result != SQLITE_OK){
+			logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para bloquear/desbloquear un cliente no ha podido prepararse.");
+		}else{
+			logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para bloquear/desbloquar un cliente esta preparado.");
+		}
+		sqlite3_bind_text(stmt, 1, nombre, strlen(nombre), SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 2, num, strlen(num), SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 3, pais, strlen(pais), SQLITE_STATIC);
+		sqlite3_bind_int(stmt, 4, contra);
+		sqlite3_bind_int(stmt, 5, telf);
+		sqlite3_bind_text(stmt, 6, dni,strlen(dni), SQLITE_STATIC);
+
+
+		result = sqlite3_step(stmt);
+				if (result != SQLITE_DONE){
+					logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","El statement para bloquear/desbloquar un cliente no se ha ejecutado.");
+				}else {
+					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para bloquear/desbloquar un cliente se ha ejecutado.");
+				}
+		result = sqlite3_finalize(stmt);
+			if (result != SQLITE_OK){
+				logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para bloquear/desbloquear un cliente no ha podido finalizarse.");
+			}else{
+				logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Statement para bloquear/desbloquar un cliente ha finalizado.");
+			}
+		result = sqlite3_close(db);
+			if(result != SQLITE_OK){
+				logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","No se ha podido cerrar la base de datos para bloquear cliente.");
+			}else{
+				logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha cerrado la base de datos para bloquear cliente.");
+			}
+		}
 
 //BORRAR
 
