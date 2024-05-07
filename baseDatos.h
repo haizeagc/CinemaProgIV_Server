@@ -25,6 +25,6 @@ void actuCliente(char *dni, char* nombre, char *num, char *pais, int contra, int
 //Borrar
 void borrarClienteDni(char *dni, HashMap *config);
 void borrarEntradaDni(char *dni, HashMap *config);
-void borrar();
+void borrarEntrada(char *dni, int codE, HashMap *config);
 
 #endif

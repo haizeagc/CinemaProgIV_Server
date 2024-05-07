@@ -7,7 +7,7 @@
 
 //SUBIR
 void subirClienteBase(HashMap *config, Cliente c){
-	sqlite3 *db;
+		sqlite3 *db;
 		sqlite3_stmt *stmt;
 		int result;
 
@@ -17,10 +17,8 @@ void subirClienteBase(HashMap *config, Cliente c){
 		}else{
 			logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha abierto la base de datos para subir clientes.");
 		}
-		Cliente * clientes = volcarCl(obtenerConfigConcreto(config,"cliente"));
 		logger_log(obtenerConfigConcreto(config,"logger"),"INFO","Se han obtenido los clientes para el volcado inicial.");
-		for(int k=0; k< 6; k++){
-			char sql1[] = "insert into CLIENTE (dni, nombre, num_tarj, pais, contrasena, telf) values (?,?,?,?,?,?)";
+			char sql1[] = "insert into CLIENTE (DNI, NOMBRE, NUM_TARJ, PAIS, CONTRASENA, TELF) values (?,?,?,?,?,?)";
 
 			result = sqlite3_prepare_v2(db, sql1, strlen(sql1) + 1, &stmt, NULL);
 			if(result != SQLITE_OK){
@@ -40,8 +38,6 @@ void subirClienteBase(HashMap *config, Cliente c){
 				}else {
 					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha insertado el cliente a la base de datos.");
 				}
-
-			}
 
 		result = sqlite3_finalize(stmt);
 					if (result != SQLITE_OK){
@@ -69,9 +65,8 @@ void subirEntradaBase(HashMap *config, Entrada e){
 		}else{
 			logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha abierto la base de datos para subir entradas.");
 		}
-		Entrada *entradas = volcarEnt(obtenerConfigConcreto(config,"entrada"));
+
 		logger_log(obtenerConfigConcreto(config,"logger"),"INFO","Se han obtenido las entradas para el volcado inicial.");
-		for(int k=0; k< 6; k++){
 			char sql3[] = "insert into ENTRADA (cod_E, dni, cod_pelicula, sala, hora, dia, mes, ano, importe, persona) values (?,?,?,?,?,?,?,?,?,?)";
 
 			result = sqlite3_prepare_v2(db, sql3, strlen(sql3) + 1, &stmt, NULL);
@@ -96,8 +91,6 @@ void subirEntradaBase(HashMap *config, Entrada e){
 				}else {
 					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha insertado la entrada a la base de datos.");
 				}
-
-			}
 
 		result = sqlite3_finalize(stmt);
 					if (result != SQLITE_OK){
@@ -188,7 +181,7 @@ void obtenerPeliculaBase(Arrays *a, HashMap *config){
 	}
 
 void obtenerClienteBase(Arrays *a, HashMap *config){
-	sqlite3 *db;
+			sqlite3 *db;
 			sqlite3_stmt *stmt;
 			int result;
 			result = sqlite3_open(obtenerConfigConcreto(config,"base"), &db);
@@ -256,7 +249,7 @@ void obtenerClienteBase(Arrays *a, HashMap *config){
 	}
 
 void obtenerEntradaBase(Arrays *a, HashMap *config){
-	sqlite3 *db;
+				sqlite3 *db;
 				sqlite3_stmt *stmt;
 				int result;
 				result = sqlite3_open(obtenerConfigConcreto(config,"base"), &db);
@@ -326,7 +319,7 @@ void obtenerEntradaBase(Arrays *a, HashMap *config){
 		}
 //ACTUALIZAR
 void actuCliente(char *dni, char* nombre, char *num, char *pais, int contra, int telf, HashMap *config){
-	sqlite3 *db;
+		sqlite3 *db;
 		sqlite3_stmt *stmt;
 		int result;
 		result = sqlite3_open(obtenerConfigConcreto(config,"base"), &db);
@@ -374,13 +367,122 @@ void actuCliente(char *dni, char* nombre, char *num, char *pais, int contra, int
 //BORRAR
 
 void borrarClienteDni(char *dni, HashMap *config){
+			sqlite3 *db;
+			sqlite3_stmt *stmt;
+			int result;
+			result = sqlite3_open(obtenerConfigConcreto(config,"base"), &db);
+			if (result != SQLITE_OK){
+				logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","No se ha abierto la base de datos para borrar un cliente.");
+			}else{
+				logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha abierto la base de datos para borrar un cliente.");
+			}
+				char sql[] = "DELETE FROM CLIENTE WHERE DNI = ?";
+				result = sqlite3_prepare_v2(db, sql, strlen(sql) + 1, &stmt, NULL);
+			if (result != SQLITE_OK){
+					logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para borrar un cliente no ha podido prepararse.");
+				}else{
+					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para borrar un cliente esta preparado.");
+				}
+			sqlite3_bind_text(stmt, 1, dni, strlen(dni), SQLITE_STATIC);
+			result = sqlite3_step(stmt);
+				if (result != SQLITE_DONE){
+					logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","El statement para borrar un cliente no se ha ejecutado.");
+				}else {
+					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para borrar un cliente se ha ejecutado.");
+				}
+
+			result = sqlite3_finalize(stmt);
+				if (result != SQLITE_OK){
+					logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para borrar un cliente no ha podido finalizarse.");
+				}else{
+					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Statement para borrar un cliente ha finalizado.");
+				}
+			result = sqlite3_close(db);
+				if(result != SQLITE_OK){
+					logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","No se ha podido cerrar la base de datos para borrar cliente.");
+				}else{
+					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha cerrado la base de datos para borrar cliente.");
+				}
+				borrarEntradaDni(dni,config);
 
 }
 void borrarEntradaDni(char *dni, HashMap *config){
+	sqlite3 *db;
+			sqlite3_stmt *stmt;
+			int result;
+			result = sqlite3_open(obtenerConfigConcreto(config,"base"), &db);
+			if (result != SQLITE_OK){
+				logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","No se ha abierto la base de datos para borrar una entrada.");
+			}else{
+				logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha abierto la base de datos para borrar una entrada.");
+			}
+			char sql1[] = "DELETE FROM ENTRADA WHERE DNI = ?";
+			result = sqlite3_prepare_v2(db, sql1, strlen(sql1) + 1, &stmt, NULL);
+			if (result != SQLITE_OK){
+				logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para borrar una entrada no ha podido prepararse.");
+			}else{
+				logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para borrar una entrada esta preparado.");
+			}
+			sqlite3_bind_text(stmt, 1, dni, strlen(dni), SQLITE_STATIC);
+			result = sqlite3_step(stmt);
+				if (result != SQLITE_DONE){
+					logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","El statement para borrar una entrada no se ha ejecutado.");
+				}else {
+					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para borrar una entrada se ha ejecutado.");
+				}
+
+			result = sqlite3_finalize(stmt);
+				if (result != SQLITE_OK){
+					logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para borrar una entrada no ha podido finalizarse.");
+				}else{
+					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Statement para borrar una entrada ha finalizado.");
+				}
+			result = sqlite3_close(db);
+				if(result != SQLITE_OK){
+					logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","No se ha podido cerrar la base de datos para borrar entrada.");
+				}else{
+					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha cerrado la base de datos para borrar entrada.");
+				}
 
 }
-void borrar(){
+void borrarEntrada(char *dni, int codE, HashMap *config){
+	sqlite3 *db;
+			sqlite3_stmt *stmt;
+			int result;
+			result = sqlite3_open(obtenerConfigConcreto(config,"base"), &db);
+			if (result != SQLITE_OK){
+				logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","No se ha abierto la base de datos para cancelar una entrada.");
+			}else{
+				logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha abierto la base de datos para cancelar una entrada.");
+			}
+			char sql1[] = "DELETE FROM ENTRADA WHERE DNI = ? AND COD_E = ? ";
+			result = sqlite3_prepare_v2(db, sql1, strlen(sql1) + 1, &stmt, NULL);
+			if (result != SQLITE_OK){
+				logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para cancelar una entrada no ha podido prepararse.");
+			}else{
+				logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para cancelar una entrada esta preparado.");
+			}
+			sqlite3_bind_text(stmt, 1, dni, strlen(dni), SQLITE_STATIC);
+			sqlite3_bind_int(stmt, 2, codE);
+			result = sqlite3_step(stmt);
+				if (result != SQLITE_DONE){
+					logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","El statement para cancelar una entrada no se ha ejecutado.");
+				}else {
+					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para cancelar una entrada se ha ejecutado.");
+				}
 
+			result = sqlite3_finalize(stmt);
+				if (result != SQLITE_OK){
+					logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para cancelar una entrada no ha podido finalizarse.");
+				}else{
+					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Statement para cancelar una entrada ha finalizado.");
+				}
+			result = sqlite3_close(db);
+				if(result != SQLITE_OK){
+					logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","No se ha podido cerrar la base de datos para cancelar entrada.");
+				}else{
+					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha cerrado la base de datos para cancelar entrada.");
+				}
 }
 
 
