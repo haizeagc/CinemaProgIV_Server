@@ -218,12 +218,12 @@ int main(int argc, char *argv[]){
 												break;
 										}
 										token = strtok(recvBuff,",");
+										int codE = (int) strtol(token,NULL,10);
+										token = strtok(NULL,",");
 										char * dni = malloc(sizeof(char) *strlen(token)+1);
 										strcpy(dni,token);
 										token = strtok(NULL,",");
 										int cod_peli = (int) strtol(token,NULL,10);
-										token = strtok(NULL,",");
-										int codE = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
 										int sala = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
@@ -235,7 +235,7 @@ int main(int argc, char *argv[]){
 										int mes = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
 										int ano = (int) strtol(token,NULL,10);
-										borrarEntrada(dni,cod_peli, codE, sala, hora, dia, mes, ano, &confi);
+										borrarEntrada(codE,dni,cod_peli, sala, hora, dia, mes, ano, &confi);
 									}while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha cancelado la entrada.");
 								}
@@ -268,7 +268,7 @@ int main(int argc, char *argv[]){
 										e.cantidad = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
 										e.importe = (int) strtol(token,NULL,10);
-										subirEntradaBase(e,&confi);
+										subirEntradaBase(&confi,e);
 
 									}while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha creado la entrada.");
