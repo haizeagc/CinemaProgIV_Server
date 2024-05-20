@@ -221,14 +221,21 @@ int main(int argc, char *argv[]){
 										char * dni = malloc(sizeof(char) *strlen(token)+1);
 										strcpy(dni,token);
 										token = strtok(NULL,",");
-										int cod_pelicula = (int) strtol(token,NULL,10);
+										int cod_peli = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
-										int dia_i = (int) strtol(token,NULL,10);
+										int codE = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
-										int mes_i = (int) strtol(token,NULL,10);
+										int sala = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
-										int ano_i = (int) strtol(token,NULL,10);
-										borrarReserva(dni,cod_hotel,dia_i, mes_i, ano_i,&confi);
+										char * hora = malloc(sizeof(char) *strlen(token)+1);
+										strcpy(hora,token);
+										token = strtok(NULL,",");
+										int dia = (int) strtol(token,NULL,10);
+										token = strtok(NULL,",");
+										int mes = (int) strtol(token,NULL,10);
+										token = strtok(NULL,",");
+										int ano = (int) strtol(token,NULL,10);
+										borrarEntrada(dni,cod_peli, codE, sala, hora, dia, mes, ano, &confi);
 									}while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha cancelado la entrada.");
 								}
@@ -238,35 +245,36 @@ int main(int argc, char *argv[]){
 										recv(comm_socket,recvBuff,sizeof(recvBuff),0);
 										if (strcmp(recvBuff,"ENTRADAS A ANADIR ENVIADAS") == 0){
 												break;
-										}/*
+										}
 										token = strtok(recvBuff,",");
-										b.dni = malloc(sizeof(char) *strlen(token)+1);
-										strcpy(b.dni,token);
+										e.dni = malloc(sizeof(char) *strlen(token)+1);
+										strcpy(e.dni,token);
 										token = strtok(NULL,",");
-										b.cod_hotel = (int) strtol(token,NULL,10);
+										e.cod_E = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
-										b.dia_i = (int) strtol(token,NULL,10);
+										e.cod_pelicula = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
-										b.mes_i = (int) strtol(token,NULL,10);
+										e.sala = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
-										b.ano_i = (int) strtol(token,NULL,10);
+										e.hora = malloc (sizeof(char)*(strlen(token)+1));
+										strcpy(e.hora,token);
 										token = strtok(NULL,",");
-										b.dia_f = (int) strtol(token,NULL,10);
+										e.dia = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
-										b.mes_f = (int) strtol(token,NULL,10);
+										e.mes = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
-										b.ano_f = (int) strtol(token,NULL,10);
+										e.ano = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
-										b.importe = (int) strtol(token,NULL,10);
+										e.cantidad = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
-										b.personas = (int) strtol(token,NULL,10);
-										subirReservas(b,&configuraciones);
-										*/
+										e.importe = (int) strtol(token,NULL,10);
+										subirEntradaBase(e,&confi);
+
 									}while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha creado la entrada.");
 								}
 
-								if (strcmp(recvBuff, "NUEVO C") == 0)
+								if (strcmp(recvBuff, "NUEVO Cliente") == 0)
 								{
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido anadir un cliente.");
 									do{
@@ -291,7 +299,7 @@ int main(int argc, char *argv[]){
 										c.contrasena = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
 										c.telf = (int) strtol(token,NULL,10);
-										subirCliente(&confi,c);
+										subirClienteBase(&confi,c);
 
 									} while(1);
 
@@ -320,7 +328,7 @@ int main(int argc, char *argv[]){
 										c.contrasena = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
 										c.telf = (int) strtol(token,NULL,10);
-										actualizarCliente(c.dni, c.nombre, c.num_tarj, c.pais, c.contrasena, c.telf,&confi);
+										actuCliente(c.dni, c.nombre, c.num_tarj, c.pais, c.contrasena, c.telf,&confi);
 
 										} while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha actualizado el cliente.");
@@ -336,7 +344,7 @@ int main(int argc, char *argv[]){
 												}
 										c.dni = malloc (sizeof(char)*(strlen(recvBuff)+1));
 										strcpy(c.dni,recvBuff);
-										borrarClientePorDni(c.dni, &confi);
+										borrarClienteDni(c.dni, &confi);
 
 										} while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha borrado el cliente.");

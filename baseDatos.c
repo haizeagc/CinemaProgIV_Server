@@ -375,7 +375,7 @@ void borrarEntrada(int codE, char *DNI, int cod_peli, int sala, char* hora, int 
 	}else{
 		logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha abierto la base de datos para reembolsar una entrada.");
 	}
-	char sql1[] = "DELETE FROM BOOKING WHERE DNI = ? AND COD_HOTEL = ? AND DIA_I = ? AND MES_I = ? AND ANO_I = ?";
+	char sql1[] = "DELETE FROM ENTRADA WHERE DNI = ? AND COD_E = ? AND COD_PELICULA = ? AND SALA = ? AND HORA = ? AND DIA = ? AND MES= ? AND ANO= ?";
 	result = sqlite3_prepare_v2(db, sql1, strlen(sql1) + 1, &stmt, NULL);
 	if (result != SQLITE_OK){
 		logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para cancelar una reserva no ha podido prepararse.");
@@ -383,10 +383,13 @@ void borrarEntrada(int codE, char *DNI, int cod_peli, int sala, char* hora, int 
 		logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para cancelar una reserva esta preparado.");
 	}
 	sqlite3_bind_text(stmt, 1, DNI, strlen(DNI), SQLITE_STATIC);
-	sqlite3_bind_int(stmt, 2, cod_hotel);
-	sqlite3_bind_int(stmt, 3, dia_i);
-	sqlite3_bind_int(stmt, 4, mes_i);
-	sqlite3_bind_int(stmt, 5, ano_i);
+	sqlite3_bind_int(stmt, 2, codE);
+	sqlite3_bind_int(stmt, 3, cod_peli);
+	sqlite3_bind_int(stmt, 4, sala);
+	sqlite3_bind_text(stmt, 5, hora, strlen(hora), SQLITE_STATIC);
+	sqlite3_bind_int(stmt, 6, dia);
+	sqlite3_bind_int(stmt, 7, mes);
+	sqlite3_bind_int(stmt, 8, ano);
 	result = sqlite3_step(stmt);
 		if (result != SQLITE_DONE){
 			logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","El statement para cancelar una reserva no se ha ejecutado.");
@@ -489,7 +492,7 @@ void borrarEntradaDni(char *dni, HashMap *config){
 				}
 
 }
-void borrarEntrada(char *dni, int codE, HashMap *config){
+void borrarEntrada1(char *dni, int codE, HashMap *config){
 	sqlite3 *db;
 			sqlite3_stmt *stmt;
 			int result;
