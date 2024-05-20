@@ -67,7 +67,7 @@ void subirEntradaBase(HashMap *config, Entrada e){
 		}
 
 		logger_log(obtenerConfigConcreto(config,"logger"),"INFO","Se han obtenido las entradas para el volcado inicial.");
-			char sql3[] = "insert into ENTRADA (cod_E, dni, cod_pelicula, sala, hora, dia, mes, ano, importe, persona) values (?,?,?,?,?,?,?,?,?,?)";
+			char sql3[] = "insert into ENTRADA (cod_E, dni, cod_pelicula, sala, hora, dia, mes, ano, importe, cantidad) values (?,?,?,?,?,?,?,?,?,?)";
 
 			result = sqlite3_prepare_v2(db, sql3, strlen(sql3) + 1, &stmt, NULL);
 			if(result != SQLITE_OK){
@@ -84,7 +84,7 @@ void subirEntradaBase(HashMap *config, Entrada e){
 			sqlite3_bind_int(stmt, 7, e.mes);
 			sqlite3_bind_int(stmt, 8, e.ano);
 			sqlite3_bind_int(stmt, 9, e.importe);
-			sqlite3_bind_int(stmt, 10, e.personas);
+			sqlite3_bind_int(stmt, 10, e.cantidad);
 			result = sqlite3_step(stmt);
 				if (result != SQLITE_DONE){
 					logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","No se ha podido insertar esta entrada a la base de datos.");
@@ -299,7 +299,7 @@ void obtenerEntradaBase(Arrays *a, HashMap *config){
 								a->arrayEntrada[j].mes = sqlite3_column_int(stmt,6);
 								a->arrayEntrada[j].ano = sqlite3_column_int(stmt,7);
 								a->arrayEntrada[j].importe = sqlite3_column_int(stmt,8);
-								a->arrayEntrada[j].personas = sqlite3_column_int(stmt,9);
+								a->arrayEntrada[j].cantidad = sqlite3_column_int(stmt,9);
 								logger_log(obtenerConfigConcreto(config,"logger"),"INFO","Se ha obtenido una entrada.");
 							}
 				}
@@ -365,6 +365,50 @@ void actuCliente(char *dni, char* nombre, char *num, char *pais, int contra, int
 		}
 
 //BORRAR
+void borrarEntrada(int codE, char *DNI, int cod_peli, int sala, char* hora, int dia, int mes, int ano, HashMap *config){
+	sqlite3 *db;
+	sqlite3_stmt *stmt;
+	int result;
+	result = sqlite3_open(obtenerConfigConcreto(config,"base"), &db);
+	if (result != SQLITE_OK){
+		logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","No se ha abierto la base de datos para reembolsar una entrada.");
+	}else{
+		logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha abierto la base de datos para reembolsar una entrada.");
+	}
+	char sql1[] = "DELETE FROM BOOKING WHERE DNI = ? AND COD_HOTEL = ? AND DIA_I = ? AND MES_I = ? AND ANO_I = ?";
+	result = sqlite3_prepare_v2(db, sql1, strlen(sql1) + 1, &stmt, NULL);
+	if (result != SQLITE_OK){
+		logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para cancelar una reserva no ha podido prepararse.");
+	}else{
+		logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para cancelar una reserva esta preparado.");
+	}
+	sqlite3_bind_text(stmt, 1, DNI, strlen(DNI), SQLITE_STATIC);
+	sqlite3_bind_int(stmt, 2, cod_hotel);
+	sqlite3_bind_int(stmt, 3, dia_i);
+	sqlite3_bind_int(stmt, 4, mes_i);
+	sqlite3_bind_int(stmt, 5, ano_i);
+	result = sqlite3_step(stmt);
+		if (result != SQLITE_DONE){
+			logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","El statement para cancelar una reserva no se ha ejecutado.");
+		}else {
+			logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para cancelar una reserva se ha ejecutado.");
+		}
+
+	result = sqlite3_finalize(stmt);
+		if (result != SQLITE_OK){
+			logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para cancelar una reserva no ha podido finalizarse.");
+		}else{
+			logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Statement para cancelar una reserva ha finalizado.");
+		}
+	result = sqlite3_close(db);
+		if(result != SQLITE_OK){
+			logger_log(obtenerConfigConcreto(config,"logger"),"WARNING","No se ha podido cerrar la base de datos para cancelar reserva.");
+		}else{
+			logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha cerrado la base de datos para cancelar reserva.");
+		}
+}
+
+
 
 void borrarClienteDni(char *dni, HashMap *config){
 			sqlite3 *db;

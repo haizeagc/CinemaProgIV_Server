@@ -31,7 +31,7 @@ typedef struct Entrada{
 	int mes;
 	int ano;
 	int importe;
-	int personas;
+	int cantidad;
 }Entrada;
 
 typedef struct Pelicula{

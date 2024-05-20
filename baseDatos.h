@@ -23,6 +23,7 @@ void obtenerPeliculaBase(Arrays *a, HashMap *config);
 void actuCliente(char *dni, char* nombre, char *num, char *pais, int contra, int telf, HashMap *config);
 
 //Borrar
+void borrarEntrada(int codE, char *DNI, int cod_peli, int sala, char* hora, int dia, int mes, int ano, HashMap *config);
 void borrarClienteDni(char *dni, HashMap *config);
 void borrarEntradaDni(char *dni, HashMap *config);
 void borrarEntrada(char *dni, int codE, HashMap *config);

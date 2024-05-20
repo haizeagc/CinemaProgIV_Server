@@ -168,7 +168,7 @@ int main(int argc, char *argv[]){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se han enviado todos los clientes.");
 									send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 								}
-								if (strcmp(recvBuff,"OBTAIN ENTRADAS") == 0){
+								if (strcmp(recvBuff,"OBTENER ENTRADAS") == 0){
 									char d[510];
 									char e[100];
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido obtener entrada.");
@@ -198,7 +198,7 @@ int main(int argc, char *argv[]){
 										sprintf(e,"%d",a.arrayEntrada[i].importe);
 										strcat(d,e);
 										strcat(d,",");
-										sprintf(e,"%d",a.arrayEntrada[i].personas);
+										sprintf(e,"%d",a.arrayEntrada[i].cantidad);
 										strcat(d,e);
 										strcat(d,",");
 										printf("%s\n",d);
@@ -206,12 +206,12 @@ int main(int argc, char *argv[]){
 										send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 										logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha enviado una entrada.");
 									}
-									strcpy(sendBuff,"ALL ENTRADAS SENT");
+									strcpy(sendBuff,"TODAS LAS ENTRADAS ENVIADAS");
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se han enviado todas las entradas.");
 									send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 								}
-								if(strcmp(recvBuff,"CANCELAR ENTRADA") == 0){
-									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido cancelar una entrada.");
+								if(strcmp(recvBuff,"REEMBOLSAR ENTRADA") == 0){
+									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido reembolsar una entrada.");
 									do{
 										recv(comm_socket,recvBuff,sizeof(recvBuff),0);
 										if (strcmp(recvBuff,"ENTRADA A BORRAR ENVIADO") == 0){
@@ -221,7 +221,7 @@ int main(int argc, char *argv[]){
 										char * dni = malloc(sizeof(char) *strlen(token)+1);
 										strcpy(dni,token);
 										token = strtok(NULL,",");
-										int cod_hotel = (int) strtol(token,NULL,10);
+										int cod_pelicula = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
 										int dia_i = (int) strtol(token,NULL,10);
 										token = strtok(NULL,",");
