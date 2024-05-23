@@ -122,14 +122,13 @@ int main(int argc, char *argv[]){
 										strcat(b,a.arrayPelicula[i].director);
 										strcat(b,",");
 										strcat(b, a.arrayPelicula[i].hora);
-										//sprintf(b,a.arrayPelicula[i].hora);
 										strcat(b,",");
 										sprintf(c,"%d",a.arrayPelicula[i].sala);
 										strcat(b,c);
 										strcat(b,",");
 										sprintf(c,"%d",a.arrayPelicula[i].precio);
 										strcat(b,c);
-										strcat(b,",");
+//										strcat(b,",");
 										printf("%s\n",b);
 										strcpy(sendBuff,b);
 										send(comm_socket, sendBuff, sizeof(sendBuff), 0);
@@ -158,8 +157,8 @@ int main(int argc, char *argv[]){
 										strcat(d,",");
 										sprintf(e,"%d",a.arrayCliente[i].telf);
 										strcat(d,e);
-										strcat(d,",");
-										strcat(d,",");
+//										strcat(d,",");
+//										strcat(d,",");
 										printf("%s\n",d);
 										strcpy(sendBuff,d);
 										send(comm_socket, sendBuff, sizeof(sendBuff), 0);
@@ -201,7 +200,7 @@ int main(int argc, char *argv[]){
 										strcat(d,",");
 										sprintf(e,"%d",a.arrayEntrada[i].cantidad);
 										strcat(d,e);
-										strcat(d,",");
+//										strcat(d,",");
 										printf("%s\n",d);
 										strcpy(sendBuff,d);
 										send(comm_socket, sendBuff, sizeof(sendBuff), 0);
@@ -240,7 +239,7 @@ int main(int argc, char *argv[]){
 									}while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha cancelado la entrada.");
 								}
-								if(strcmp(recvBuff,"HACER ENTRADA") == 0){
+								if(strcmp(recvBuff,"COMPRAR ENTRADA") == 0){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido hacer una entrada.");
 									do{
 										recv(comm_socket,recvBuff,sizeof(recvBuff),0);
