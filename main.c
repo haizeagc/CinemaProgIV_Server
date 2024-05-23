@@ -107,7 +107,7 @@ int main(int argc, char *argv[]){
 
 								printf("Command received: %s \n", recvBuff);
 								logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha obtenido un mensaje.");
-								if (strcmp(recvBuff,"OBTAIN PELICULAS") == 0){
+								if (strcmp(recvBuff,"OBTENER PELICULAS") == 0){
 									char b[510];
 									char c[100];
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido obtener peliculas.");
@@ -121,7 +121,8 @@ int main(int argc, char *argv[]){
 										strcat(b,",");
 										strcat(b,a.arrayPelicula[i].director);
 										strcat(b,",");
-										sprintf(b,a.arrayPelicula[i].hora);
+										strcat(b, a.arrayPelicula[i].hora);
+										//sprintf(b,a.arrayPelicula[i].hora);
 										strcat(b,",");
 										sprintf(c,"%d",a.arrayPelicula[i].sala);
 										strcat(b,c);
@@ -135,11 +136,11 @@ int main(int argc, char *argv[]){
 										logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha enviado una pelicula.");
 
 									}
-									strcpy(sendBuff,"ALL PELICULAS SENT");
+									strcpy(sendBuff,"TODAS LAS PELICULAS ENVIADAS");
 									send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha enviado todos las peliculas.");
 								}
-								if (strcmp(recvBuff,"OBTAIN CLIENTS") == 0){
+								if (strcmp(recvBuff,"OBTENER CLIENTES") == 0){
 									char d[510];
 									char e[100];
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido obtener clientes.");
@@ -164,7 +165,7 @@ int main(int argc, char *argv[]){
 										send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 										logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha enviado un cliente.");
 									}
-									strcpy(sendBuff,"ALL CLIENTS SENT");
+									strcpy(sendBuff,"TODOS LOS CLIENTES ENVIADOS");
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se han enviado todos los clientes.");
 									send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 								}
@@ -274,7 +275,7 @@ int main(int argc, char *argv[]){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha creado la entrada.");
 								}
 
-								if (strcmp(recvBuff, "NUEVO Cliente") == 0)
+								if (strcmp(recvBuff, "NUEVO CLIENTE") == 0)
 								{
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido anadir un cliente.");
 									do{
@@ -304,7 +305,7 @@ int main(int argc, char *argv[]){
 									} while(1);
 
 								}
-								if (strcmp(recvBuff, "UPDATE CLIENTE") == 0){
+								if (strcmp(recvBuff, "ACTUALIZAR CLIENTE") == 0){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido actualizar un cliente.");
 									do{
 										recv(comm_socket, recvBuff, sizeof(recvBuff), 0);
