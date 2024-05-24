@@ -115,20 +115,26 @@ int main(int argc, char *argv[]){
 										sprintf(c,"%d",a.arrayPelicula[i].cod_pelicula);
 										strcpy(b,c);
 										strcat(b,",");
+
 										strcat(b,a.arrayPelicula[i].nombre);
 										strcat(b,",");
+
 										strcat(b,a.arrayPelicula[i].genero);
 										strcat(b,",");
+
 										strcat(b,a.arrayPelicula[i].director);
 										strcat(b,",");
+
 										strcat(b, a.arrayPelicula[i].hora);
 										strcat(b,",");
+
 										sprintf(c,"%d",a.arrayPelicula[i].sala);
 										strcat(b,c);
 										strcat(b,",");
+
 										sprintf(c,"%d",a.arrayPelicula[i].precio);
 										strcat(b,c);
-//										strcat(b,",");
+
 										printf("%s\n",b);
 										strcpy(sendBuff,b);
 										send(comm_socket, sendBuff, sizeof(sendBuff), 0);
@@ -149,19 +155,23 @@ int main(int argc, char *argv[]){
 
 										strcpy(d,a.arrayCliente[i].dni);
 										strcat(d,",");
+
 										strcat(d,a.arrayCliente[i].nombre);
 										strcat(d,",");
+
 										strcat(d,a.arrayCliente[i].num_tarj);
 										strcat(d,",");
+
 										strcat(d,a.arrayCliente[i].pais);
 										strcat(d,",");
+
 										sprintf(e,"%d",a.arrayCliente[i].contrasena);
 										strcat(d,e);
 										strcat(d,",");
+
 										sprintf(e,"%d",a.arrayCliente[i].telf);
 										strcat(d,e);
-//										strcat(d,",");
-//										strcat(d,",");
+
 										printf("%s\n",d);
 										strcpy(sendBuff,d);
 										send(comm_socket, sendBuff, sizeof(sendBuff), 0);
@@ -182,7 +192,6 @@ int main(int argc, char *argv[]){
 										strcat(l,e);
 										strcat(l,",");
 
-										//	strcpy(d,a.arrayEntrada[i].dni);
 										strcat(l, a.arrayEntrada[i].dni);
 										strcat(l,",");
 
@@ -215,7 +224,7 @@ int main(int argc, char *argv[]){
 
 										sprintf(e,"%d",a.arrayEntrada[i].cantidad);
 										strcat(l,e);
-//										strcat(d,",");
+
 										printf("%s\n",l);
 										strcpy(sendBuff,l);
 										send(comm_socket, sendBuff, sizeof(sendBuff), 0);
@@ -225,6 +234,7 @@ int main(int argc, char *argv[]){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se han enviado todas las entradas.");
 									send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 								}
+								//NO FUNCIONA
 								if(strcmp(recvBuff,"REEMBOLSAR ENTRADA") == 0){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido reembolsar una entrada.");
 									do{
@@ -234,26 +244,35 @@ int main(int argc, char *argv[]){
 										}
 										token = strtok(recvBuff,",");
 										int codE = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										char * dni = malloc(sizeof(char) *strlen(token)+1);
 										strcpy(dni,token);
+
 										token = strtok(NULL,",");
 										int cod_peli = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										int sala = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										char * hora = malloc(sizeof(char) *strlen(token)+1);
 										strcpy(hora,token);
+
 										token = strtok(NULL,",");
 										int dia = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										int mes = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										int ano = (int) strtol(token,NULL,10);
+
 										borrarEntrada(codE,dni,cod_peli, sala, hora, dia, mes, ano, &confi);
 									}while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha cancelado la entrada.");
 								}
+								//NO FUNCIONA
 								if(strcmp(recvBuff,"COMPRAR ENTRADA") == 0){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido hacer una entrada.");
 									do{
@@ -264,25 +283,35 @@ int main(int argc, char *argv[]){
 										token = strtok(recvBuff,",");
 										e.dni = malloc(sizeof(char) *strlen(token)+1);
 										strcpy(e.dni,token);
+
 										token = strtok(NULL,",");
 										e.cod_E = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										e.cod_pelicula = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										e.sala = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										e.hora = malloc (sizeof(char)*(strlen(token)+1));
 										strcpy(e.hora,token);
+
 										token = strtok(NULL,",");
 										e.dia = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										e.mes = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										e.ano = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										e.cantidad = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										e.importe = (int) strtol(token,NULL,10);
+
 										subirEntradaBase(&confi,e);
 
 							            free(e.dni);
@@ -291,7 +320,7 @@ int main(int argc, char *argv[]){
 									}while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha creado la entrada.");
 								}
-
+								//NO FUNCIONA
 								if (strcmp(recvBuff, "NUEVO CLIENTE") == 0)
 								{
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido anadir un cliente.");
@@ -304,24 +333,31 @@ int main(int argc, char *argv[]){
 										token = strtok(recvBuff,",");
 										c.dni = malloc (sizeof(char)*(strlen(token)+1));
 										strcpy(c.dni,token);
+
 										token = strtok(NULL,",");
 										c.nombre = malloc (sizeof(char)*(strlen(token)+1));
 										strcpy(c.nombre,token);
+
 										token = strtok(NULL,",");
 										c.num_tarj = malloc (sizeof(char)*(strlen(token)+1));
 										strcpy(c.num_tarj,token);
+
 										token = strtok(NULL,",");
 										c.pais = malloc (sizeof(char)*(strlen(token)+1));
 										strcpy(c.pais,token);
+
 										token = strtok(NULL,",");
 										c.contrasena = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										c.telf = (int) strtol(token,NULL,10);
+
 										subirClienteBase(&confi,c);
 
 									} while(1);
 
 								}
+								//NO FUNCIONA
 								if (strcmp(recvBuff, "ACTUALIZAR CLIENTE") == 0){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido actualizar un cliente.");
 									do{
@@ -333,25 +369,32 @@ int main(int argc, char *argv[]){
 										token = strtok(recvBuff,",");
 										c.dni = malloc (sizeof(char)*(strlen(token)+1));
 										strcpy(c.dni,token);
+
 										token = strtok(NULL,",");
 										c.nombre = malloc (sizeof(char)*(strlen(token)+1));
 										strcpy(c.nombre,token);
+
 										token = strtok(NULL,",");
 										c.num_tarj = malloc (sizeof(char)*(strlen(token)+1));
 										strcpy(c.num_tarj,token);
+
 										token = strtok(NULL,",");
 										c.pais = malloc (sizeof(char)*(strlen(token)+1));
 										strcpy(c.pais,token);
+
 										token = strtok(NULL,",");
 										c.contrasena = (int) strtol(token,NULL,10);
+
 										token = strtok(NULL,",");
 										c.telf = (int) strtol(token,NULL,10);
+
 										actuCliente(c.dni, c.nombre, c.num_tarj, c.pais, c.contrasena, c.telf,&confi);
 
 										} while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha actualizado el cliente.");
 
 								}
+								//NO SE HA PROBADO
 								if (strcmp(recvBuff, "BORRAR CLIENTE") == 0){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido borrar un cliente.");
 									do{
