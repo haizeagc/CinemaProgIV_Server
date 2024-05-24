@@ -365,7 +365,7 @@ void actuCliente(char *dni, char* nombre, char *num, char *pais, int contra, int
 		}
 
 //BORRAR
-void borrarEntrada(int codE, char *DNI, int cod_peli, int sala, char* hora, int dia, int mes, int ano, HashMap *config){
+void borrarEntrada(int codE, char *dni, int cod_peli, int sala, char* hora, int dia, int mes, int ano, HashMap *config){
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	int result;
@@ -375,15 +375,15 @@ void borrarEntrada(int codE, char *DNI, int cod_peli, int sala, char* hora, int 
 	}else{
 		logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha abierto la base de datos para reembolsar una entrada.");
 	}
-	char sql1[] = "DELETE FROM ENTRADA WHERE DNI = ? AND COD_E = ? AND COD_PELICULA = ? AND SALA = ? AND HORA = ? AND DIA = ? AND MES= ? AND ANO= ?";
+	char sql1[] = "DELETE FROM ENTRADA WHERE  COD_E = ? AND DNI = ? AND COD_PELICULA = ? AND SALA = ? AND HORA = ? AND DIA = ? AND MES= ? AND ANO= ?";
 	result = sqlite3_prepare_v2(db, sql1, strlen(sql1) + 1, &stmt, NULL);
 	if (result != SQLITE_OK){
 		logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para cancelar una reserva no ha podido prepararse.");
 	}else{
 		logger_log(obtenerConfigConcreto(config,"logger"),"FINE","El statement para cancelar una reserva esta preparado.");
 	}
-	sqlite3_bind_text(stmt, 1, DNI, strlen(DNI), SQLITE_STATIC);
-	sqlite3_bind_int(stmt, 2, codE);
+	sqlite3_bind_int(stmt, 1, codE);
+	sqlite3_bind_text(stmt, 2, dni, strlen(dni), SQLITE_STATIC);
 	sqlite3_bind_int(stmt, 3, cod_peli);
 	sqlite3_bind_int(stmt, 4, sala);
 	sqlite3_bind_text(stmt, 5, hora, strlen(hora), SQLITE_STATIC);

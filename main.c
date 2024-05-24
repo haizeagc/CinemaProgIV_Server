@@ -234,7 +234,6 @@ int main(int argc, char *argv[]){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se han enviado todas las entradas.");
 									send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 								}
-								//NO FUNCIONA
 								if(strcmp(recvBuff,"REEMBOLSAR ENTRADA") == 0){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido reembolsar una entrada.");
 									do{
@@ -272,7 +271,6 @@ int main(int argc, char *argv[]){
 									}while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha cancelado la entrada.");
 								}
-								//NO FUNCIONA
 								if(strcmp(recvBuff,"COMPRAR ENTRADA") == 0){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido hacer una entrada.");
 									do{
@@ -320,7 +318,6 @@ int main(int argc, char *argv[]){
 									}while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha creado la entrada.");
 								}
-								//NO FUNCIONA
 								if (strcmp(recvBuff, "NUEVO CLIENTE") == 0)
 								{
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido anadir un cliente.");
@@ -357,7 +354,6 @@ int main(int argc, char *argv[]){
 									} while(1);
 
 								}
-								//NO FUNCIONA
 								if (strcmp(recvBuff, "ACTUALIZAR CLIENTE") == 0){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido actualizar un cliente.");
 									do{
@@ -394,7 +390,6 @@ int main(int argc, char *argv[]){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha actualizado el cliente.");
 
 								}
-								//NO SE HA PROBADO
 								if (strcmp(recvBuff, "BORRAR CLIENTE") == 0){
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido borrar un cliente.");
 									do{
