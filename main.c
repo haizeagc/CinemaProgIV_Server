@@ -115,27 +115,20 @@ int main(int argc, char *argv[]){
 										sprintf(c,"%d",a.arrayPelicula[i].cod_pelicula);
 										strcpy(b,c);
 										strcat(b,",");
-
 										strcat(b,a.arrayPelicula[i].nombre);
 										strcat(b,",");
-
 										strcat(b,a.arrayPelicula[i].genero);
 										strcat(b,",");
-
 										strcat(b,a.arrayPelicula[i].director);
 										strcat(b,",");
-
 										strcat(b, a.arrayPelicula[i].hora);
 										strcat(b,",");
-
 										sprintf(c,"%d",a.arrayPelicula[i].sala);
 										strcat(b,c);
 										strcat(b,",");
-
 										sprintf(c,"%d",a.arrayPelicula[i].precio);
 										strcat(b,c);
-										strcat(b,",");
-
+//										strcat(b,",");
 										printf("%s\n",b);
 										strcpy(sendBuff,b);
 										send(comm_socket, sendBuff, sizeof(sendBuff), 0);
@@ -151,26 +144,24 @@ int main(int argc, char *argv[]){
 									char e[100];
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido obtener clientes.");
 									for(int i = 0; i < a.cantidadCliente; i++){
+										memset(d, 0, sizeof(d));
+
+
 										strcpy(d,a.arrayCliente[i].dni);
 										strcat(d,",");
-
 										strcat(d,a.arrayCliente[i].nombre);
 										strcat(d,",");
-
 										strcat(d,a.arrayCliente[i].num_tarj);
 										strcat(d,",");
-
 										strcat(d,a.arrayCliente[i].pais);
 										strcat(d,",");
-
 										sprintf(e,"%d",a.arrayCliente[i].contrasena);
 										strcat(d,e);
 										strcat(d,",");
-
 										sprintf(e,"%d",a.arrayCliente[i].telf);
 										strcat(d,e);
-										strcat(d,",");
-
+//										strcat(d,",");
+//										strcat(d,",");
 										printf("%s\n",d);
 										strcpy(sendBuff,d);
 										send(comm_socket, sendBuff, sizeof(sendBuff), 0);
@@ -181,50 +172,52 @@ int main(int argc, char *argv[]){
 									send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 								}
 								if (strcmp(recvBuff,"OBTENER ENTRADAS") == 0){
-									char f[510];
-									char g[100];
+									char l[510];
+									char e[100];
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha pedido obtener entrada.");
 									for(int i = 0; i < a.cantidadEntrada; i++){
-										sprintf(g,"%d",a.arrayEntrada[i].cod_E);
-										strcat(f,g);
-										strcat(f,",");
+										memset(l, 0, sizeof(l));
 
-										strcpy(f,a.arrayEntrada[i].dni);
-										strcat(f,",");
+										sprintf(e,"%d",a.arrayEntrada[i].cod_E);
+										strcat(l,e);
+										strcat(l,",");
 
-										sprintf(g,"%d",a.arrayEntrada[i].cod_pelicula);
-										strcat(f,g);
-										strcat(f,",");
+										//	strcpy(d,a.arrayEntrada[i].dni);
+										strcat(l, a.arrayEntrada[i].dni);
+										strcat(l,",");
 
-										sprintf(g,"%d",a.arrayEntrada[i].sala);
-										strcat(f,g);
-										strcat(f,",");
+										sprintf(e,"%d",a.arrayEntrada[i].cod_pelicula);
+										strcat(l,e);
+										strcat(l,",");
 
-										strcpy(f,a.arrayEntrada[i].hora);
-										strcat(f,",");
+										sprintf(e,"%d",a.arrayEntrada[i].sala);
+										strcat(l,e);
+										strcat(l,",");
 
-										sprintf(g,"%d",a.arrayEntrada[i].dia);
-										strcat(f,g);
-										strcat(f,",");
+										strcat(l, a.arrayEntrada[i].hora);
+										strcat(l,",");
 
-										sprintf(g,"%d",a.arrayEntrada[i].mes);
-										strcat(f,g);
-										strcat(f,",");
+										sprintf(e,"%d",a.arrayEntrada[i].dia);
+										strcat(l,e);
+										strcat(l,",");
 
-										sprintf(g,"%d",a.arrayEntrada[i].ano);
-										strcat(f,g);
-										strcat(f,",");
+										sprintf(e,"%d",a.arrayEntrada[i].mes);
+										strcat(l,e);
+										strcat(l,",");
 
-										sprintf(g,"%d",a.arrayEntrada[i].importe);
-										strcat(f,g);
-										strcat(f,",");
+										sprintf(e,"%d",a.arrayEntrada[i].ano);
+										strcat(l,e);
+										strcat(l,",");
 
-										sprintf(g,"%d",a.arrayEntrada[i].cantidad);
-										strcat(f,g);
-										strcat(f,",");
+										sprintf(e,"%d",a.arrayEntrada[i].importe);
+										strcat(l,e);
+										strcat(l,",");
 
-										printf("%s\n",f);
-										strcpy(sendBuff,f);
+										sprintf(e,"%d",a.arrayEntrada[i].cantidad);
+										strcat(l,e);
+//										strcat(d,",");
+										printf("%s\n",l);
+										strcpy(sendBuff,l);
 										send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 										logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha enviado una entrada.");
 									}
@@ -291,6 +284,9 @@ int main(int argc, char *argv[]){
 										token = strtok(NULL,",");
 										e.importe = (int) strtol(token,NULL,10);
 										subirEntradaBase(&confi,e);
+
+							            free(e.dni);
+							            free(e.hora);
 
 									}while(1);
 									logger_log(obtenerConfigConcreto(&confi,"logger"),"INFO","Se ha creado la entrada.");
