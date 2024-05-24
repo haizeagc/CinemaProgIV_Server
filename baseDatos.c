@@ -39,7 +39,7 @@ void subirClienteBase(HashMap *config, Cliente c){
 					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha insertado el cliente a la base de datos.");
 				}
 
-		result = sqlite3_finalize(stmt);
+			result = sqlite3_finalize(stmt);
 					if (result != SQLITE_OK){
 						logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para insertar clientes no ha podido finalizarse.");
 					}else{
@@ -67,7 +67,7 @@ void subirEntradaBase(HashMap *config, Entrada e){
 		}
 
 		logger_log(obtenerConfigConcreto(config,"logger"),"INFO","Se han obtenido las entradas para el volcado inicial.");
-			char sql3[] = "insert into ENTRADA (cod_E, dni, cod_pelicula, sala, hora, dia, mes, ano, importe, cantidad) values (?,?,?,?,?,?,?,?,?,?)";
+			char sql3[] = "INSERT INTO ENTRADA (COD_E, DNI, COD_PELICULA, SALA, HORA, DIA, MES, ANO, IMPORTE, PERSONA) values (?,?,?,?,?,?,?,?,?,?)";
 
 			result = sqlite3_prepare_v2(db, sql3, strlen(sql3) + 1, &stmt, NULL);
 			if(result != SQLITE_OK){
@@ -92,7 +92,7 @@ void subirEntradaBase(HashMap *config, Entrada e){
 					logger_log(obtenerConfigConcreto(config,"logger"),"FINE","Se ha insertado la entrada a la base de datos.");
 				}
 
-		result = sqlite3_finalize(stmt);
+			result = sqlite3_finalize(stmt);
 					if (result != SQLITE_OK){
 						logger_log(obtenerConfigConcreto(config,"logger"),"SEVERE","El statement para insertar entradas no ha podido finalizarse.");
 					}else{
